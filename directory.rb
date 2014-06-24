@@ -25,3 +25,7 @@ puts "Hannah Climb Every Mountain"
 puts "Joe Kerb Crawler"
 puts "Alex Dr. Beats"
 puts "Jeremy who?"
+
+print "Overall we have "
+print 25
+print " mighty students"
