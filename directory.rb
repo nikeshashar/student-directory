@@ -28,4 +28,4 @@ puts "Jeremy who?"
 
 print "Overall we have "
 print 25
-print " mighty students"
+puts " mighty students"
