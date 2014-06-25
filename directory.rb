@@ -1,62 +1,56 @@
-#cleaning puts using array
-# students = [
-#  {:name => "Dave Hole in One", :cohort => :june},
-#  {:name => "Eddie the Clamberer", :cohort => :june},
-#  {:name => "Catharina Rover", :cohort => :june},
-#  {:name => "Igor the Melodic", :cohort => :june},
-#  {:name => "Marco the Bro", :cohort => :june},
-#  {:name => "Lisa Waterbaby", :cohort => :june},
-#  {:name => "Michiel all ears", :cohort => :june},
-#  {:name => "Jean Big Screen", :cohort => :june},
-#  {:name => "Nicola Roadrunner", :cohort => :june},
-#  {:name => "Jennie the Wanderer", :cohort => :june},
-#  {:name => "Iona VoiceBox", :cohort => :june},
-#  {:name => "Nikesh Jammin Chilli", :cohort => :june},
-#  {:name => "Chole bendy", :cohort => :june},
-#  {:name => "Toan Ice Cool", :cohort => :june},
-#  {:name => "Jamie Uniball", :cohort => :june},
-#  {:name => "Peter Hoy", :cohort => :june},
-#  {:name => "Talal Olympian", :cohort => :june},
-#  {:name => "Charlie String", :cohort => :june},
-#  {:name => "Charlotte flat",:cohort => :june},
-#  {:name => "Thomas Bolt", :cohort => :june},
-#  {:name => "Zoe da Vinci", :cohort => :june],
-#  {:name => "Hannah Climb Every Mountain", :cohort => :june],
-#  {:name => "Joe Kerb Crawler", :cohort => :june],
-#  {:name => "Alex Dr. Beats", :cohort => :june],
-#  {:name => "Jeremy who?", :cohort => :june]
-# ]
 def input_students
-	puts "Please enter the names of the students"
-	puts "To finish just hit return twice"
 	#creates an empty array
 	students = []
+	valid_months = {
+		"june" => 6,
+		"july" => 7,
+		"september" => 9,
+	}
+loop do
+	p "Please enter the names of the students"
+	p "To finish just hit return twice"
 	name = gets.chomp
-	#whiile then name is not empty, repeat this code
-	while !name.empty? do
-	#add the student hash to the array
-	students << {:name => name, :cohort => :june}
-	puts "Now we have #{students.length} students"
-	#get another name from the user
-	name = gets.chomp
+	#cohort = ""
+	break if name.empty?
+
+	loop do
+		p "What cohort are you in?"
+		@cohort = gets.chomp || "june"
+		break if valid_months[@cohort]
+	end
+
+	p "What is your hobby"
+	hobby = gets.chomp
+	p "What country were you born in?"
+	origin = gets.chomp
+	#add the details hash to the array
+	students << {:name => name, :cohort => @cohort.to_sym, :hobby => hobby, :origin => origin}
+	p "Now we have #{students.length} students with their details"
+	#get another name from the user	
 end
-#return array of students
+#return array of students with hobbies
 students
 end
 
 def print_header
-	puts "The students of my cohort at Makers Academy"
-	puts "------------------------"
+	p "The students of my cohort at Makers Academy with their hobbies"
+	p "------------------------"
 end
 
 def print(students)
-	students.each do |student|
-	puts "#{student[:name]} (#{student[:cohort]} cohort)"
-	end
+	count = 0
+	while count < students.length do
+	p "#{students[count][:name]} is in the #{students[count][:cohort]} cohort and enjoys #{students[count][:hobby]}. #{students[count][:name]} is from #{students[count][:origin]}.".center(100)
+	count = count + 1
+end
+		
+	# students.each do |student|
+	# p "#{student[:name]} (#{student[:cohort]} cohort)" if student[:name].start_with?("A", "a") && student[:name].length < 12
+	# end
 end
 
 def print_footer(names)
-	puts "Overall we have #{names.length} mighty students"
+	p "Overall we have #{names.length} mighty students"
 end
 #nothing will happen until we do the last bit
 students = input_students
