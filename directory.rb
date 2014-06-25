@@ -2,7 +2,6 @@ require "date"
 def input_students
 	#creates an empty array
 	students = []
-
 loop do
 	p "Please enter the names of the students"
 	p "To finish just hit return twice"
@@ -22,15 +21,15 @@ loop do
 	origin = gets.chomp
 	#add the details hash to the array
 	students << {:name => name, :cohort => Date.parse(@cohort).strftime(format="%B").to_sym, :hobby => hobby, :origin => origin}
-	p "Now we have #{students.length} students with their details"
+	p "Now we have #{students.length} #{pluralise('student', students.length)} with their details"
 	#get another name from the user	
 end
 #return array of students with hobbies
 students
 end
 
-def print_header
-	p "The students of my cohort at Makers Academy with their hobbies"
+def print_header(students)
+	p "The #{pluralise('student', students.length)} of my cohort at Makers Academy with their hobbies"
 	p "------------------------"
 end
 
@@ -47,16 +46,24 @@ end
 end
 
 def print_footer(names)
-	p "Overall we have #{names.length} mighty students"
+	p "Overall we have #{names.length} mighty #{pluralise('student', names.length)}"
 end
 
 def sort_by_cohort(students)
 	students.sort_by!{|student| Date.parse(student[:cohort].to_s)}
 
 end	
+
+def pluralise(word, count)
+	if count == 1
+		return word
+	else 
+		return word + "s"
+	end	
+end
 #nothing will happen until we do the last bit
 students = input_students
-print_header
+print_header(students)
 sort_by_cohort(students)
 print(students)
 print_footer(students)
