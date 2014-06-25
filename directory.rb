@@ -1,11 +1,8 @@
+require "date"
 def input_students
 	#creates an empty array
 	students = []
-	valid_months = {
-		"june" => 6,
-		"july" => 7,
-		"september" => 9,
-	}
+
 loop do
 	p "Please enter the names of the students"
 	p "To finish just hit return twice"
@@ -16,7 +13,7 @@ loop do
 	loop do
 		p "What cohort are you in?"
 		@cohort = gets.chomp || "june"
-		break if valid_months[@cohort]
+		break if Date.parse(@cohort) rescue nil
 	end
 
 	p "What is your hobby"
@@ -24,7 +21,7 @@ loop do
 	p "What country were you born in?"
 	origin = gets.chomp
 	#add the details hash to the array
-	students << {:name => name, :cohort => @cohort.to_sym, :hobby => hobby, :origin => origin}
+	students << {:name => name, :cohort => Date.parse(@cohort).strftime(format="%B").to_sym, :hobby => hobby, :origin => origin}
 	p "Now we have #{students.length} students with their details"
 	#get another name from the user	
 end
@@ -52,9 +49,15 @@ end
 def print_footer(names)
 	p "Overall we have #{names.length} mighty students"
 end
+
+def sort_by_cohort(students)
+	students.sort_by!{|student| Date.parse(student[:cohort].to_s)}
+
+end	
 #nothing will happen until we do the last bit
 students = input_students
 print_header
+sort_by_cohort(students)
 print(students)
 print_footer(students)
 
