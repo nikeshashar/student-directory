@@ -1,22 +1,23 @@
+
 require "date"
 @students = []
 def input_students
 loop do
 	p "Please enter the names of the students"
 	p "To finish just hit return twice"
-	name = gets.gsub(/\n/, "")
+	name = STDIN.gets.gsub(/\n/, "")
 	break if name.empty?
 
 	loop do
 		p "What cohort are you in?"
-		@cohort = gets.gsub(/\n/, "")|| "june"
+		@cohort = STDIN.gets.gsub(/\n/, "")|| "june"
 		break if Date.parse(@cohort) rescue nil
 	end
 
 	p "What is your hobby"
-	hobby = gets.gsub(/\n/, "")
+	hobby = STDIN.gets.gsub(/\n/, "")
 	p "What country were you born in?"
-	origin = gets.gsub(/\n/, "")
+	origin = STDIN.gets.gsub(/\n/, "")
 	@students << {:name => name, :cohort => Date.parse(@cohort).strftime(format="%B").to_sym, :hobby => hobby, :origin => origin}
 	p "Now we have #{@students.length} #{pluralise('student', @students.length)} with their details"
 	puts ""
@@ -82,13 +83,25 @@ def show_students
 	end	
 end
 
-def load_students
-	file=File.open("students.csv","r")
+def load_students (filename="students.csv")
+	file=File.open(filename,"r")
 	file.readlines.each do |line|
 		name, cohort, hobby, origin = line.chomp.split(',')
 		@students << {:name => name,:cohort => cohort.to_sym, :hobby => hobby, :origin => origin}
 	end
 	file.close
+end
+
+def try_load_students 
+	filename = ARGV.first
+	return load_students if filename.nil?
+	if File.exists?(filename)
+		load_students(filename)
+		puts "Loaded #{@students.length} from #{filename}"
+	else
+		puts "Sorry, #{filename} doesn't exist"
+		exit
+	end
 end
 
 def process(selection)
@@ -100,7 +113,7 @@ def process(selection)
 		when "3"
 			save_students
 		when "4"
-			load_students
+			try_load_students
 		when "9"
 			exit
 		else 
@@ -111,7 +124,7 @@ end
 def interactive_menu
 	loop do
 	print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
     puts ""
 	end
 end
