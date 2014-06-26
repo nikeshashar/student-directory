@@ -1,29 +1,44 @@
-
 require "date"
 @students = []
-def input_students
-loop do
-	p "Please enter the names of the students"
-	p "To finish just hit return twice"
-	name = STDIN.gets.gsub(/\n/, "")
-	break if name.empty?
 
+def input_students
+	while true 
+		name = enter_name
+		if name.empty?
+			break 
+		end
+			cohort = check_cohort
+			hobby = check_hobby
+			origin = check_origin
+			@students << {:name => name, :cohort => cohort, :hobby => hobby, :origin => origin}
+			p "Now we have #{@students.length} #{pluralise('student', @students.length)} with their details"
+			puts ""
+	end
+	@students
+end
+
+def enter_name
+	p "Please enter the student name or press Enter twice to return to menu"
+	STDIN.gets.chomp.capitalize
+end
+
+def check_cohort
 	loop do
 		p "What cohort are you in?"
-		@cohort = STDIN.gets.gsub(/\n/, "")|| "june"
+		@cohort = STDIN.gets.chomp 
 		break if Date.parse(@cohort) rescue nil
 	end
-
-	p "What is your hobby"
-	hobby = STDIN.gets.gsub(/\n/, "")
-	p "What country were you born in?"
-	origin = STDIN.gets.gsub(/\n/, "")
-	@students << {:name => name, :cohort => Date.parse(@cohort).strftime(format="%B").to_sym, :hobby => hobby, :origin => origin}
-	p "Now we have #{@students.length} #{pluralise('student', @students.length)} with their details"
-	puts ""
-	
+	Date.parse(@cohort).strftime(format="%B")
 end
-@students
+
+def check_hobby
+	p "What is your hobby"
+	STDIN.gets.chomp	
+end
+
+def check_origin
+	p "What country were you born in?"
+	STDIN.gets.chomp	
 end
 
 def print_header
@@ -33,11 +48,8 @@ end
 
 def print_students_list
 	@students.sort_by!{|student| Date.parse(student[:cohort].to_s)} 
-	
-	count = 0
-	while count < @students.length do
-		p "#{@students[count][:name]} is in the #{@students[count][:cohort]} cohort and enjoys #{@students[count][:hobby]}. #{@students[count][:name]} is from #{@students[count][:origin]}."
-	count = count + 1 
+	@students.each do |student| 
+		p "#{student[:name]} is in the #{student[:cohort]} cohort and enjoys #{student[:hobby]}. #{student[:name]} is from #{student[:origin]}."
 	end
 end
 
@@ -130,22 +142,3 @@ def interactive_menu
 end
 interactive_menu
 
-#nothing will happen until we do the last bit
-# students = input_students
-# if !(students.empty?)
-# 	print_header(students)
-# 	# sort_by_cohort(students)
-# 	print(students)
-# 	print_footer(students)
-# else
-# 	puts "you got no friends bro"
-# end
-
-	
-# students.each do |student|
-# p "#{student[:name]} (#{student[:cohort]} cohort)" if student[:name].start_with?("A", "a") && student[:name].length < 12
-# end
- 
-# def sort_by_cohort(students)
-# 	students.sort_by!{|student| Date.parse(student[:cohort].to_s)}
-# end	
